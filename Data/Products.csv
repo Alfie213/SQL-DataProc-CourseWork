@@ -1,0 +1,21 @@
+ProductID,ProductName,ProductType,DeveloperID
+1,VR Headset,Gadget,101
+2,AR Glasses,Gadget,102
+3,VR Game: Adventure,Software,103
+4,AR App: Navigation,Software,104
+5,VR Headset Pro,Gadget,105
+6,AR Gloves,Gadget,106
+7,VR Game: Battle Arena,Software,107
+8,AR App: Fitness,Software,108
+9,VR Glasses,Gadget,109
+10,AR Headset,Gadget,110
+11,VR Game: Racing,Software,111
+12,AR App: Travel Guide,Software,112
+13,VR Suit,Gadget,113
+14,AR Goggles,Gadget,114
+15,VR Game: Puzzle Master,Software,115
+16,AR App: Education,Software,116
+17,VR Holo-Glasses,Gadget,117
+18,AR Smart Watch,Gadget,118
+19,VR Game: Horror Escape,Software,119
+20,AR App: Shopping,Software,120
