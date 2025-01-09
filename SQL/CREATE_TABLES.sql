@@ -17,7 +17,7 @@ CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
     UserID INT,
     ProductID INT,
-    OrderDate DATE,
+    OrderDate TEXT,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
