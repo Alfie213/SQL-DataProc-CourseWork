@@ -10,6 +10,7 @@ CREATE TABLE Products (
     ProductName VARCHAR(100),
     ProductType VARCHAR(50),
     DeveloperID INT,
+    Price DECIMAL(10, 2),
     FOREIGN KEY (DeveloperID) REFERENCES Developers(DeveloperID)
 );
 
@@ -18,6 +19,7 @@ CREATE TABLE Orders (
     UserID INT,
     ProductID INT,
     OrderDate TEXT,
+    Quantity INT,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
