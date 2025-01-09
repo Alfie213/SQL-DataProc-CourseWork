@@ -22,7 +22,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
-CREATE TABLE VRDevices (
+CREATE TABLE Devices (
     DeviceID INT PRIMARY KEY,
     DeviceName VARCHAR(100),
     Manufacturer VARCHAR(100)
@@ -47,7 +47,8 @@ CREATE TABLE Subscriptions (
 CREATE TABLE Developers (
     DeveloperID INT PRIMARY KEY,
     DeveloperName VARCHAR(100),
-    Country VARCHAR(50)
+    Country VARCHAR(50),
+    FoundedYear INT
 );
 
 CREATE TABLE Feedbacks (
