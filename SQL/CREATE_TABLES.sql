@@ -32,7 +32,7 @@ CREATE TABLE DeviceFeatures (
     FeatureID INT PRIMARY KEY,
     FeatureDescription VARCHAR(255),
     DeviceID INT,
-    FOREIGN KEY (DeviceID) REFERENCES VRDevices(DeviceID)
+    FOREIGN KEY (DeviceID) REFERENCES Devices(DeviceID)
 );
 
 CREATE TABLE Subscriptions (
