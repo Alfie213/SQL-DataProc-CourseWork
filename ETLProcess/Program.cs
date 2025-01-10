@@ -1,11 +1,12 @@
 ﻿using System.Data;
 using System.Data.SQLite;
+using System.Text;
 
 class ETLProcess
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Start ETL process.");
+        Console.WriteLine("Start Program.");
 
         // Connecting to the OLTP database
         string sourceConnectionString = "Data Source=oltp_database.db;Version=3;";
@@ -21,12 +22,21 @@ class ETLProcess
         DataTable factOrdersData = TransformFactOrders(ordersData);
         DataTable factSubscriptionsData = TransformFactSubscriptions(subscriptionsData);
 
+        // Exporting transformed data to CSV
+        Console.WriteLine("Start exporting to CSV.");
+        ExportDataToCSV(factOrdersData, "FactOrders.csv");
+        ExportDataToCSV(factSubscriptionsData, "FactSubscriptions.csv");
+        ExportDataToCSV(developersData, "Developers.csv");
+        Console.WriteLine("Exporting to CSV completed successfully!");
+
         // Loading data into the OLAP database
+        Console.WriteLine("Start ETL process.");
         LoadDataToOLAP(destinationConnectionString, "FactOrders", factOrdersData);
         LoadDataToOLAP(destinationConnectionString, "FactSubscriptions", factSubscriptionsData);
         LoadDeveloperHistoryToOLAP(destinationConnectionString, "DeveloperHistory", developersData);
-
         Console.WriteLine("ETL process completed successfully!");
+
+        Console.WriteLine("Program Finished. Thank you!");
     }
 
     // Extracting data from SQLite database
@@ -124,6 +134,27 @@ class ETLProcess
         }
 
         return factSubscriptions;
+    }
+
+    // Exporting data to CSV
+    static void ExportDataToCSV(DataTable dataTable, string fileName)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        // Adding column names as the first row
+        string[] columnNames = dataTable.Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToArray();
+        sb.AppendLine(string.Join(",", columnNames));
+
+        // Adding data rows
+        foreach (DataRow row in dataTable.Rows)
+        {
+            string[] fields = row.ItemArray.Select(field => field.ToString().Replace(",", ";")).ToArray();
+            sb.AppendLine(string.Join(",", fields));
+        }
+
+        // Writing to file
+        File.WriteAllText(fileName, sb.ToString());
+        Console.WriteLine($"Data exported to {fileName}");
     }
 
     // Loading data into OLAP database
