@@ -47,10 +47,13 @@ CREATE TABLE Subscriptions (
 );
 
 CREATE TABLE Developers (
-    DeveloperID INT PRIMARY KEY,
-    DeveloperName VARCHAR(100),
-    Country VARCHAR(50),
-    FoundedYear INT
+    DeveloperID INTEGER PRIMARY KEY,
+    DeveloperName TEXT,
+    Country TEXT,
+    FoundedYear INTEGER,
+    StartDate DATE,
+    EndDate DATE,
+    IsActive INTEGER
 );
 
 CREATE TABLE Feedbacks (
