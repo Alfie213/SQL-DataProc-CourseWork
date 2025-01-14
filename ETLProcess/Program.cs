@@ -31,6 +31,7 @@ class ETLProcess
 
         // Loading data into the OLAP database
         Console.WriteLine("Start ETL process.");
+        CreateTablesIfNotExist(destinationConnectionString);
         LoadDataToOLAP(destinationConnectionString, "FactOrders", factOrdersData);
         LoadDataToOLAP(destinationConnectionString, "FactSubscriptions", factSubscriptionsData);
         LoadDeveloperHistoryToOLAP(destinationConnectionString, "DeveloperHistory", developersData);
@@ -155,6 +156,66 @@ class ETLProcess
         // Writing to file
         File.WriteAllText(fileName, sb.ToString());
         Console.WriteLine($"Data exported to {fileName}");
+    }
+
+    // Method to create tables if they don't exist
+    static void CreateTablesIfNotExist(string connectionString)
+    {
+        using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+        {
+            conn.Open();
+
+            // Create FactOrders table if it doesn't exist
+            string createFactOrdersTableQuery = @"
+        CREATE TABLE IF NOT EXISTS FactOrders (
+            FactOrderID INTEGER PRIMARY KEY,
+            UserID INTEGER,
+            ProductID INTEGER,
+            TotalQuantity INTEGER,
+            TotalAmount DECIMAL(10, 2),
+            OrderMonth INTEGER,
+            OrderYear INTEGER,
+            FOREIGN KEY (UserID) REFERENCES DimUsers(UserID),
+            FOREIGN KEY (ProductID) REFERENCES DimProducts(ProductID)
+        );";
+            using (SQLiteCommand cmd = new SQLiteCommand(createFactOrdersTableQuery, conn))
+            {
+                cmd.ExecuteNonQuery();
+            }
+
+            // Create FactSubscriptions table if it doesn't exist
+            string createFactSubscriptionsTableQuery = @"
+        CREATE TABLE IF NOT EXISTS FactSubscriptions (
+            FactSubscriptionID INTEGER PRIMARY KEY,
+            UserID INTEGER,
+            SubscriptionType VARCHAR(50),
+            TotalSubscriptions INTEGER,
+            StartYear INTEGER,
+            EndYear INTEGER,
+            FOREIGN KEY (UserID) REFERENCES DimUsers(UserID)
+        );";
+            using (SQLiteCommand cmd = new SQLiteCommand(createFactSubscriptionsTableQuery, conn))
+            {
+                cmd.ExecuteNonQuery();
+            }
+
+            // Create DeveloperHistory table if it doesn't exist
+            string createDeveloperHistoryTableQuery = @"
+        CREATE TABLE IF NOT EXISTS DeveloperHistory (
+            DeveloperID INTEGER,
+            DeveloperName VARCHAR(100),
+            Country VARCHAR(50),
+            FoundedYear INTEGER,
+            StartDate DATE,
+            EndDate DATE,
+            IsCurrent BOOLEAN,
+            PRIMARY KEY (DeveloperID, StartDate)
+        );";
+            using (SQLiteCommand cmd = new SQLiteCommand(createDeveloperHistoryTableQuery, conn))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 
     // Loading data into OLAP database
