@@ -16,7 +16,7 @@ class ETLProcess
         // Extracting data from OLTP database
         DataTable ordersData = ExtractData(sourceConnectionString, "SELECT * FROM Orders");
         DataTable subscriptionsData = ExtractData(sourceConnectionString, "SELECT * FROM Subscriptions");
-        DataTable developersData = ExtractData(sourceConnectionString, "SELECT COALESCE(OrderDate, '1900-01-01') AS OrderDate, * FROM Orders");
+        DataTable developersData = ExtractData(sourceConnectionString, "SELECT * FROM Developers");
 
         // Transforming data (e.g., aggregation)
         DataTable factOrdersData = TransformFactOrders(ordersData);
