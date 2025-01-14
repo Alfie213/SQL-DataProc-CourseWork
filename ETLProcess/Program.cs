@@ -24,9 +24,9 @@ class ETLProcess
 
         // Exporting transformed data to CSV
         Console.WriteLine("Start exporting to CSV.");
-        ExportDataToCSV(factOrdersData, "FactOrders.csv");
-        ExportDataToCSV(factSubscriptionsData, "FactSubscriptions.csv");
-        ExportDataToCSV(developersData, "Developers.csv");
+        ExportDataToCSV(factOrdersData, "CSV/FactOrders.csv");
+        ExportDataToCSV(factSubscriptionsData, "CSV/FactSubscriptions.csv");
+        ExportDataToCSV(developersData, "CSV/Developers.csv");
         Console.WriteLine("Exporting to CSV completed successfully!");
 
         // Loading data into the OLAP database
@@ -236,7 +236,12 @@ class ETLProcess
             {
                 foreach (DataRow row in developersData.Rows)
                 {
-                    string insertQuery = $"INSERT INTO {tableName} (DeveloperID, DeveloperName, Country, FoundedYear, StartDate, EndDate, IsCurrent) VALUES (@DeveloperID, @DeveloperName, @Country, @FoundedYear, @StartDate, @EndDate, @IsCurrent)";
+                    string insertQuery = $@"
+                    INSERT INTO {tableName} 
+                    (DeveloperID, DeveloperName, Country, FoundedYear, StartDate, EndDate, IsCurrent) 
+                    VALUES 
+                    (@DeveloperID, @DeveloperName, @Country, @FoundedYear, @StartDate, @EndDate, @IsCurrent)";
+
                     using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn, transaction))
                     {
                         cmd.Parameters.AddWithValue("@DeveloperID", row["DeveloperID"]);
