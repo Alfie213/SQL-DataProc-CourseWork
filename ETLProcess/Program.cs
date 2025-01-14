@@ -26,7 +26,7 @@ class ETLProcess
         Console.WriteLine("Start exporting to CSV.");
         ExportDataToCSV(factOrdersData, "CSV/FactOrders.csv");
         ExportDataToCSV(factSubscriptionsData, "CSV/FactSubscriptions.csv");
-        ExportDataToCSV(developersData, "CSV/Developers.csv");
+        ExportDataToCSV(developersData, "CSV/DeveloperHistory.csv");
         Console.WriteLine("Exporting to CSV completed successfully!");
 
         // Loading data into the OLAP database
@@ -208,7 +208,7 @@ class ETLProcess
             FoundedYear INTEGER,
             StartDate DATE,
             EndDate DATE,
-            IsCurrent BOOLEAN,
+            IsActive BOOLEAN,
             PRIMARY KEY (DeveloperID, StartDate)
         );";
             using (SQLiteCommand cmd = new SQLiteCommand(createDeveloperHistoryTableQuery, conn))
@@ -297,11 +297,11 @@ class ETLProcess
             {
                 foreach (DataRow row in developersData.Rows)
                 {
-                    string insertQuery = $@"
-                    INSERT INTO {tableName} 
-                    (DeveloperID, DeveloperName, Country, FoundedYear, StartDate, EndDate, IsCurrent) 
-                    VALUES 
-                    (@DeveloperID, @DeveloperName, @Country, @FoundedYear, @StartDate, @EndDate, @IsCurrent)";
+                    string insertQuery = @"
+                INSERT INTO DeveloperHistory 
+                (DeveloperID, DeveloperName, Country, FoundedYear, StartDate, EndDate, IsActive) 
+                VALUES 
+                (@DeveloperID, @DeveloperName, @Country, @FoundedYear, @StartDate, @EndDate, @IsActive)";
 
                     using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn, transaction))
                     {
@@ -309,9 +309,9 @@ class ETLProcess
                         cmd.Parameters.AddWithValue("@DeveloperName", row["DeveloperName"]);
                         cmd.Parameters.AddWithValue("@Country", row["Country"]);
                         cmd.Parameters.AddWithValue("@FoundedYear", row["FoundedYear"]);
-                        cmd.Parameters.AddWithValue("@StartDate", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@EndDate", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IsCurrent", true);
+                        cmd.Parameters.AddWithValue("@StartDate", row["StartDate"]);
+                        cmd.Parameters.AddWithValue("@EndDate", row["EndDate"]);
+                        cmd.Parameters.AddWithValue("@IsActive", row["IsActive"]);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -319,4 +319,5 @@ class ETLProcess
             }
         }
     }
+
 }

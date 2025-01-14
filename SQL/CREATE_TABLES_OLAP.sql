@@ -27,6 +27,6 @@ CREATE TABLE DeveloperHistory (
     FoundedYear INTEGER,
     StartDate DATE,
     EndDate DATE,
-    IsCurrent BOOLEAN,
+    IsActive BOOLEAN,
     PRIMARY KEY (DeveloperID, StartDate)
 );
