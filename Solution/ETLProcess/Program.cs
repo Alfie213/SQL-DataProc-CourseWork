@@ -23,6 +23,15 @@ class ETLProcess
         DataTable factSubscriptionsData = TransformFactSubscriptions(subscriptionsData);
 
         // Exporting transformed data to CSV
+
+        // Ensure CSV directory exists
+        string csvDirectory = "CSV";
+        if (!Directory.Exists(csvDirectory))
+        {
+            Directory.CreateDirectory(csvDirectory);
+            Console.WriteLine("CSV directory created.");
+        }
+
         Console.WriteLine("Start exporting to CSV.");
         ExportDataToCSV(factOrdersData, "CSV/FactOrders.csv");
         ExportDataToCSV(factSubscriptionsData, "CSV/FactSubscriptions.csv");
